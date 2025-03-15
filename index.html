@@ -39,56 +39,13 @@
                 // Save the results in localStorage
                 localStorage.setItem('udidResults', JSON.stringify(resultData));
 
-                // Display the JSON formatted results in the result section
-                document.getElementById("result").innerText = JSON.stringify(resultData, null, 2);
-
-                // Create the .mobileconfig download button
+                // Open the mobileconfig file for installation (iOS behavior)
                 const blob = new Blob([responseText], { type: 'application/xml' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = 'profile.mobileconfig';
-                link.innerText = "Download .mobileconfig";
-                link.id = 'downloadLink';
-                link.style.display = 'inline';  // Show the download link
+                const url = URL.createObjectURL(blob);
+                window.location.href = url;  // This will open the file and initiate installation
 
-                // Append the link to the result section to trigger the download when clicked
-                document.getElementById("result").appendChild(link);
-                
             } catch (error) {
-                document.getElementById("result").innerText = "Error: " + error.message;
-            }
-        }
-
-        // Function to handle GET request after the profile is installed
-        function getDeviceInfo() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const deviceBase64 = urlParams.get('device');
-
-            if (deviceBase64) {
-                // Decode the base64-encoded device info
-                const decodedData = atob(deviceBase64);
-
-                try {
-                    // Parse the JSON data from the decoded string
-                    const deviceInfo = JSON.parse(decodedData);
-
-                    // Display the device info in a formatted JSON manner
-                    const resultData = {
-                        type: 'Device Info',
-                        deviceInfo: deviceInfo
-                    };
-
-                    // Save the results in localStorage
-                    localStorage.setItem('udidResults', JSON.stringify(resultData));
-
-                    // Display the JSON formatted device info in the result section
-                    document.getElementById("result").innerText = JSON.stringify(resultData, null, 2);
-                    
-                } catch (error) {
-                    document.getElementById("result").innerText = "Error: Could not decode or parse device data.";
-                }
-            } else {
-                document.getElementById("result").innerText = "Error: No device data found in URL.";
+                alert("Error: " + error.message);
             }
         }
 
@@ -104,7 +61,7 @@
 
         // Check if the URL contains the 'device' parameter and display the device info
         window.onload = function() {
-            getDeviceInfo();
+            // No need to call getDeviceInfo() as we no longer show the device info automatically
         };
     </script>
 </head>
@@ -112,7 +69,5 @@
     <h1>UDID Generator</h1>
     <button onclick="postRequest()">Generate .mobileconfig (POST)</button>
     <button onclick="showSavedResults()">Show Saved Results</button>
-
-    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
 </body>
 </html>
