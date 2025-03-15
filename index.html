@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UDID Generator</title>
     <script>
-        const originalUrl = "https://veloraios.github.io/Udid-fetch-test";  // Original URL
+        // Function to clean the URL by removing anything after "/?"
+        function cleanUrl() {
+            let currentUrl = window.location.href;
 
-        // Function to check the URL and redirect if "device" is found
-        function checkAndRedirect() {
-            const currentUrl = window.location.href;
-            if (currentUrl.toLowerCase().includes("device")) {
-                // Redirect to the original URL
-                window.location.href = originalUrl;
+            // Remove anything after the first occurrence of "/?"
+            const cleanUrl = currentUrl.split("/?")[0];
+
+            // If the URL was modified, redirect to the cleaned URL
+            if (currentUrl !== cleanUrl) {
+                window.location.href = cleanUrl;
             }
         }
 
@@ -52,7 +54,7 @@
             }
         }
 
-        // Function to save and display device information from URL
+        // Function to save device info from URL
         function saveDeviceInfo() {
             const urlParams = new URLSearchParams(window.location.search);
             const deviceBase64 = urlParams.get('device');
@@ -86,7 +88,7 @@
 
         window.onload = function() {
             saveDeviceInfo();  // Automatically save device info on page load if present in the URL
-            checkAndRedirect();  // Check for "device" in the URL and redirect if found
+            cleanUrl();  // Clean the URL if it contains "/?"
         };
     </script>
 </head>
