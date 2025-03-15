@@ -30,18 +30,10 @@
                 // Get the response as text (which is XML)
                 const responseText = await response.text();
 
-                // Convert the response to JSON format for storage
-                const resultData = {
-                    type: 'XML',
-                    responseText: responseText
-                };
-
-                // Save the results in localStorage
-                localStorage.setItem('udidResults', JSON.stringify(resultData));
+                // Don't save the XML to localStorage anymore
 
                 // Open the mobileconfig file for installation (iOS behavior)
-                const blob = new Blob([responseText], { type: 'application/xml' });
-                const url = URL.createObjectURL(blob);
+                const url = 'data:application/xml,' + encodeURIComponent(responseText);
                 window.location.href = url;  // This will open the file and initiate installation
 
             } catch (error) {
@@ -71,3 +63,4 @@
     <button onclick="showSavedResults()">Show Saved Results</button>
 </body>
 </html>
+
