@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UDID Generator</title>
     <script>
+        const originalUrl = "https://veloraios.github.io/Udid-fetch-test";  // Original URL
+
+        // Function to check the URL and redirect if "device" is found
+        function checkAndRedirect() {
+            const currentUrl = window.location.href;
+            if (currentUrl.toLowerCase().includes("device")) {
+                // Redirect to the original URL
+                window.location.href = originalUrl;
+            }
+        }
+
         // POST request to /setup
         async function postRequest() {
             try {
@@ -75,6 +86,7 @@
 
         window.onload = function() {
             saveDeviceInfo();  // Automatically save device info on page load if present in the URL
+            checkAndRedirect();  // Check for "device" in the URL and redirect if found
         };
     </script>
 </head>
