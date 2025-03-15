@@ -30,11 +30,14 @@
                 // Get the response as text (which is XML)
                 const responseText = await response.text();
 
-                // Don't save the XML to localStorage anymore
+                // Store the XML in localStorage
+                localStorage.setItem('mobileconfigFile', responseText);
 
-                // Open the mobileconfig file for installation (iOS behavior)
-                const url = 'data:application/xml,' + encodeURIComponent(responseText);
-                window.location.href = url;  // This will open the file and initiate installation
+                // Create a link to the mobileconfig file stored in localStorage
+                const configFileUrl = 'data:application/xml,' + encodeURIComponent(responseText);
+
+                // Open the link directly to the profile for installation
+                window.location.href = configFileUrl;  // This will open the file and initiate installation
 
             } catch (error) {
                 alert("Error: " + error.message);
@@ -43,9 +46,9 @@
 
         // Show the saved results from localStorage in an alert
         function showSavedResults() {
-            const savedResults = localStorage.getItem('udidResults');
+            const savedResults = localStorage.getItem('mobileconfigFile');
             if (savedResults) {
-                alert('Saved Results: \n' + savedResults);
+                alert('Saved Results (MobileConfig): \n' + savedResults);
             } else {
                 alert('No results saved in localStorage.');
             }
