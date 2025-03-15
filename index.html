@@ -30,9 +30,6 @@
                 // Get the response as text (which is XML)
                 const responseText = await response.text();
 
-                // Store the XML in localStorage
-                localStorage.setItem('mobileconfigFile', responseText);
-
                 // Encode the XML into a data URL
                 const configFileUrl = 'data:application/x-apple-aspen-config;charset=utf-8,' + encodeURIComponent(responseText);
 
@@ -44,24 +41,56 @@
             }
         }
 
-        // Show the saved results from localStorage in an alert
-        function showSavedResults() {
-            const savedResults = localStorage.getItem('mobileconfigFile');
-            if (savedResults) {
-                alert('Saved Results (MobileConfig): \n' + savedResults);
+        // Function to save and display device information from URL
+        function saveDeviceInfo() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const deviceBase64 = urlParams.get('device');
+
+            if (deviceBase64) {
+                // Decode the base64-encoded device info
+                const decodedData = atob(deviceBase64);
+
+                try {
+                    // Parse the JSON data from the decoded string
+                    const deviceInfo = JSON.parse(decodedData);
+
+                    // Save the device info to localStorage
+                    localStorage.setItem('deviceInfo', JSON.stringify(deviceInfo));
+
+                    // Optionally, show an alert saying the device info has been saved
+                    alert("Device Information has been saved to localStorage.");
+
+                } catch (error) {
+                    alert('Error: Could not decode or parse device data.');
+                }
             } else {
-                alert('No results saved in localStorage.');
+                alert('Error: No device data found in URL.');
+            }
+        }
+
+        // Function to show saved device information from localStorage
+        function showSavedDeviceInfo() {
+            const savedDeviceInfo = localStorage.getItem('deviceInfo');
+            if (savedDeviceInfo) {
+                const deviceInfo = JSON.parse(savedDeviceInfo);
+                let infoText = "Saved Device Information:\n";
+                for (const key in deviceInfo) {
+                    infoText += `${key}: ${deviceInfo[key]}\n`;
+                }
+                alert(infoText); // Show the device info in an alert
+            } else {
+                alert('No device information saved in localStorage.');
             }
         }
 
         window.onload = function() {
-            // No need to call getDeviceInfo() as we no longer show the device info automatically
+            saveDeviceInfo();  // Automatically save device info on page load if present in the URL
         };
     </script>
 </head>
 <body>
     <h1>UDID Generator</h1>
     <button onclick="postRequest()">Generate .mobileconfig (POST)</button>
-    <button onclick="showSavedResults()">Show Saved Results</button>
+    <button onclick="showSavedDeviceInfo()">Show Saved Device Info</button>
 </body>
 </html>
