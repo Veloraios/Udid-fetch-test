@@ -33,8 +33,8 @@
                 // Store the XML in localStorage
                 localStorage.setItem('mobileconfigFile', responseText);
 
-                // Create a link to the mobileconfig file stored in localStorage
-                const configFileUrl = 'data:application/xml,' + encodeURIComponent(responseText);
+                // Encode the XML into a data URL
+                const configFileUrl = 'data:application/x-apple-aspen-config;charset=utf-8,' + encodeURIComponent(responseText);
 
                 // Open the link directly to the profile for installation
                 window.location.href = configFileUrl;  // This will open the file and initiate installation
@@ -54,7 +54,6 @@
             }
         }
 
-        // Check if the URL contains the 'device' parameter and display the device info
         window.onload = function() {
             // No need to call getDeviceInfo() as we no longer show the device info automatically
         };
@@ -66,4 +65,3 @@
     <button onclick="showSavedResults()">Show Saved Results</button>
 </body>
 </html>
-
