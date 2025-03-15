@@ -57,14 +57,9 @@
                     // Save the device info to localStorage
                     localStorage.setItem('deviceInfo', JSON.stringify(deviceInfo));
 
-                    // Optionally, show an alert saying the device info has been saved
-                    alert("Device Information has been saved to localStorage.");
-
                 } catch (error) {
-                    alert('Error: Could not decode or parse device data.');
+                    // No alert for errors anymore
                 }
-            } else {
-                alert('Error: No device data found in URL.');
             }
         }
 
@@ -73,13 +68,8 @@
             const savedDeviceInfo = localStorage.getItem('deviceInfo');
             if (savedDeviceInfo) {
                 const deviceInfo = JSON.parse(savedDeviceInfo);
-                let infoText = "Saved Device Information:\n";
-                for (const key in deviceInfo) {
-                    infoText += `${key}: ${deviceInfo[key]}\n`;
-                }
-                alert(infoText); // Show the device info in an alert
-            } else {
-                alert('No device information saved in localStorage.');
+                // Show the device info in JSON format in the alert
+                alert(JSON.stringify(deviceInfo, null, 2)); // Pretty JSON format
             }
         }
 
@@ -94,3 +84,4 @@
     <button onclick="showSavedDeviceInfo()">Show Saved Device Info</button>
 </body>
 </html>
+
